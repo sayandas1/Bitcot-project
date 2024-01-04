@@ -13,11 +13,10 @@ phases:
       - docker build -t 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest .
       - docker tag 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest
       - echo Writing image definitions file...
-      - echo '[{"name":"php-pipeline","imageUri":"334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest"}]' > imagedefinitions.json
-  post_build:
-    commands:
-      - echo Pushing Docker image to ECR...
-      - docker push 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest
-
+      - echo '[{"name":"exp-code-pipeline","imageUri":"334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest"}]' > imagedefinitions.json
 artifacts:
-  files: imagedefinitions.json
+  files: 
+    - imagedefinitions.json
+    - codedeploy-scripts/**/*
+  discard-paths: yes
+  base-directory: .
