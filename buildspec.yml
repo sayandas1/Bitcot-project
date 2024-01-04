@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 334355813845.dkr.ecr.us-east-1.amazonaws.com
+      - echo Logging in to Docker Hub...
+      - docker login --username sayandas713151 --password sayan1997
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest .
+      - docker tag 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest
+      - echo Writing image definitions file...
+      - echo '[{"name":"php-pipeline","imageUri":"334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest"}]' > imagedefinitions.json
+  post_build:
+    commands:
+      - echo Pushing Docker image to ECR...
+      - docker push 334355813845.dkr.ecr.us-east-1.amazonaws.com/php-website:latest
+
+artifacts:
+  files: imagedefinitions.json
